@@ -1,6 +1,6 @@
 # iconrx
 
-Download [Iconify](https://iconify.design) icons (200,000+) as clean local `.svg` files. Framework-agnostic, zero dependencies.
+Download icons as clean local `.svg` files — Lucide, Tabler, Simple Icons, and 200,000+ icons via [Iconify](https://iconify.design). Framework-agnostic, zero dependencies.
 
 ```bash
 npx iconrx add menu user arrow-right
@@ -23,7 +23,7 @@ npx iconrx init               # Interactive setup saved in package.json (optiona
 | `--set <name>` | Icon set used when no prefix is given | `lucide` |
 | `--size <size>` | `24px` (or `24`), `1.5rem`, `1em`, `100%`... (keeps proportions) | `1em` |
 | `--as <name>` | Rename icon (same as `icon=name`) | |
-| `-a`, `--all` | Search across all Iconify sets (`search`) | |
+| `-a`, `--all` | Search across all icon sets (`search`) | |
 
 ## Examples
 

@@ -27,7 +27,7 @@ const red = ansi("31");
 class CancelledError extends Error { }
 
 const HELP = `
-${bold("iconrx")} ${dim("— download Iconify icons as local .svg files")}
+${bold("iconrx")} ${dim("— download icons as local .svg files")}
 
 ${bold("Commands:")}
   add <icons...>      Download icons into your project

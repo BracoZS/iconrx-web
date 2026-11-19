@@ -1,7 +1,7 @@
 {
   "name": "iconrx",
   "version": "0.1.0",
-  "description": "Download Iconify icons as clean local .svg files. Framework-agnostic, zero dependencies.",
+  "description": "Download icons as clean local .svg files — Lucide, Tabler, Simple Icons, and 200,000+ icons via Iconify. Framework-agnostic, zero dependencies.",
   "type": "module",
   "bin": {
     "iconrx": "./src/cli.js"
@@ -17,6 +17,7 @@
   },
   "keywords": [
     "icons",
+    "local",
     "svg",
     "iconify",
     "cli"
