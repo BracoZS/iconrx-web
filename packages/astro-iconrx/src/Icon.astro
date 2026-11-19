@@ -1,0 +1,49 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import type { IconName } from "./types.generated";
+// @ts-ignore - resolved by the astro-iconrx Vite plugin
+import { getIcon, fallback, iconrxConfig } from "virtual:iconrx";
+
+interface Props extends Omit<HTMLAttributes<"svg">, "width" | "height"> {
+  name: IconName;
+  /** Any CSS size ("1.5rem", "24px") or a number (px). Defaults to "1em" (matches the text size). */
+  size?: string | number;
+  title?: string;
+}
+
+const { name, size = iconrxConfig.size, title, ...rest } = Astro.props;
+
+const icon = name ? await getIcon(name) : null;
+const isFallback = !icon;
+
+if (name && isFallback && import.meta.env.DEV) {
+  console.warn(`[iconrx] "${name}" not found in /${iconrxConfig.dir}`);
+}
+
+const { attrs, innerHTML } = icon ?? fallback;
+
+const hasLabel = Boolean(title || rest["aria-label"] || rest["aria-labelledby"]);
+const a11yAttrs = hasLabel
+  ? { role: "img" as const }
+  : { "aria-hidden": "true" as const, focusable: "false" as const };
+
+const escapeHtml = (str: string) =>
+  str
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+
+const finalInnerHTML = title
+  ? `<title>${escapeHtml(title)}</title>${innerHTML}`
+  : innerHTML;
+---
+
+<svg
+  width={size}
+  height={size}
+  {...attrs}
+  {...a11yAttrs}
+  {...rest}
+  set:html={finalInnerHTML}
+/>

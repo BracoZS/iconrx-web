@@ -1,0 +1,25 @@
+{
+  "name": "iconrx",
+  "version": "0.1.0",
+  "description": "Download Iconify icons as clean local .svg files. Framework-agnostic, zero dependencies.",
+  "type": "module",
+  "bin": {
+    "iconrx": "./src/cli.js"
+  },
+  "exports": {
+    ".": "./src/core.js"
+  },
+  "files": [
+    "src"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "keywords": [
+    "icons",
+    "svg",
+    "iconify",
+    "cli"
+  ],
+  "license": "MIT"
+}

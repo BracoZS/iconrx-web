@@ -1,0 +1,46 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import { iconMap, type IconName, fallback } from "./iconMap";
+
+interface Props extends Omit<HTMLAttributes<"svg">, "width" | "height"> {
+  name: IconName;
+  size?: string | number;
+  title?: string;
+}
+
+const { name, size = "1em", title, ...rest } = Astro.props;
+
+const icon = iconMap[name];
+const isFallback = !icon;
+
+if (isFallback && import.meta.env.DEV) {
+  console.warn(`[Icon] "${name}" not found in /src/assets/icons`);
+}
+
+const { attrs, innerHTML } = icon ?? fallback;
+
+const hasLabel = Boolean(title || rest["aria-label"] || rest["aria-labelledby"]);
+const a11yAttrs = hasLabel
+  ? { role: "img" as const }
+  : { "aria-hidden": "true" as const, focusable: "false" as const };
+
+const escapeHtml = (str: string) =>
+  str
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+
+const finalInnerHTML = title
+  ? `<title>${escapeHtml(title)}</title>${innerHTML}`
+  : innerHTML;
+---
+
+<svg
+  width={size}
+  height={size}
+  {...attrs}
+  {...a11yAttrs}
+  {...rest}
+  set:html={finalInnerHTML}
+/>

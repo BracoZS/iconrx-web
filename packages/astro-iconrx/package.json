@@ -1,0 +1,46 @@
+{
+  "name": "astro-iconrx",
+  "version": "0.1.0",
+  "description": "Lightweight Astro icon integration: local SVGs, auto-download from Iconify in dev, 100% static in build.",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./src/index.d.ts",
+      "default": "./src/index.js"
+    },
+    "./icon": {
+      "types": "./src/Icon.d.ts",
+      "default": "./src/Icon.astro"
+    },
+    "./svelte": "./src/Icon.svelte",
+    "./core": "./src/core.js"
+  },
+  "files": [
+    "src"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "keywords": [
+    "astro",
+    "astro-integration",
+    "withastro",
+    "astro-component",
+    "icons",
+    "svg",
+    "iconify"
+  ],
+  "dependencies": {
+    "iconrx": "workspace:^"
+  },
+  "peerDependencies": {
+    "astro": ">=4.0.0",
+    "svelte": ">=4.0.0"
+  },
+  "peerDependenciesMeta": {
+    "svelte": {
+      "optional": true
+    }
+  },
+  "license": "MIT"
+}
