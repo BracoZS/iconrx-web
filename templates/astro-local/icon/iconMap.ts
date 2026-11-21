@@ -1,18 +1,16 @@
-import type { IconName } from "./icons";
-
-export type { IconName };
+export type { IconName } from "./icons";
 
 export type IconData = {
   attrs: Record<string, string>;
   innerHTML: string;
 };
 
-// Cambia esta ruta si guardas tus .svg en otra carpeta (por defecto: src/assets/icons)
-const rawIcons = import.meta.glob("/src/assets/icons/**/*.svg", {
+// Change this path if you store your .svg files in another folder (default: src/assets/icons)
+const rawIcons = import.meta.glob<string>("/src/assets/icons/*.svg", {
   query: "?raw",
   import: "default",
   eager: true,
-}) as Record<string, string>;
+});
 
 const ALLOWED_SVG_ATTRS = new Set([
   "viewBox",
@@ -52,23 +50,25 @@ function parseSvg(raw: string): IconData {
     attrs.viewBox = "0 0 24 24";
   }
 
-  // Regla inteligente: ¿tiene fill o stroke? Usarlo; si no, fallback a currentColor / none
+  // Smart rule: has fill or stroke? Use it; otherwise, fall back to currentColor / none
   if (!attrs.fill) {
     attrs.fill = attrs.stroke ? "none" : "currentColor";
   }
 
-  const innerHTML = cleaned.replace(/<svg\b[^>]*>|<\/svg>/gi, "").trim();
+  // Basic cleanup for downloaded SVGs (not a full sanitizer for untrusted user input)
+  const innerHTML = cleaned
+    .replace(/<svg\b[^>]*>|<\/svg>/gi, "")
+    .replace(/<script\b[^>]*\/>|<script\b[\s\S]*?<\/script\s*>/gi, "")
+    .replace(/\son[a-z]+\s*=\s*(?:"[^"]*"|'[^']*')/gi, "")
+    .replace(/\s(?:xlink:)?href\s*=\s*(?:"\s*javascript:[^"]*"|'\s*javascript:[^']*')/gi, "")
+    .trim();
 
   return { attrs, innerHTML };
 }
 
 export const iconMap: Record<string, IconData> = Object.fromEntries(
   Object.entries(rawIcons).map(([path, svg]) => {
-    const normalizedPath = path.replace(/\\/g, "/");
-    const name = normalizedPath
-      .replace(/^.*\/icons\//, "")
-      .replace(/\.svg$/i, "");
-
+    const name = path.split(/[\\/]/).pop()!.replace(/\.svg$/i, "");
     return [name, parseSvg(svg)];
   })
 );
@@ -85,33 +85,41 @@ export const fallback: IconData = {
   innerHTML: `<circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/>`,
 };
 
-// En modo DEV, actualiza ./icons.d.ts en esta misma carpeta con los nombres reales de los SVGs
-if (import.meta.env.DEV && typeof process !== "undefined" && process.versions?.node) {
-  Promise.all([import("node:fs"), import("node:url"), import("node:path")]).then(
-    ([fs, url, path]) => {
-      try {
-        const dtsPath = import.meta.url.startsWith("file:")
-          ? url.fileURLToPath(new URL("./icons.d.ts", import.meta.url))
-          : path.resolve(process.cwd(), import.meta.url.replace(/^\//, ""), "../icons.d.ts");
+// In DEV mode, updates ./icons.d.ts in this same folder with the actual SVG names
+if (
+  import.meta.env.DEV &&
+  import.meta.env.SSR &&
+  typeof process !== "undefined" &&
+  process.versions?.node
+) {
+  Promise.all([
+    import(/* @vite-ignore */ "node:fs"),
+    import(/* @vite-ignore */ "node:url"),
+    import(/* @vite-ignore */ "node:path"),
+  ])
+    .then(([fs, url, path]) => {
+      const dtsPath = import.meta.url.startsWith("file:")
+        ? url.fileURLToPath(new URL("./icons.d.ts", import.meta.url))
+        : path.resolve(process.cwd(), import.meta.url.replace(/^\//, ""), "../icons.d.ts");
 
-        const names = Object.keys(iconMap).sort();
-        const union = names.length
-          ? names.map((n) => JSON.stringify(n)).join(" | ")
-          : "string";
+      const names = Object.keys(iconMap).sort();
+      const union = names.length
+        ? names.map((n) => JSON.stringify(n)).join(" | ")
+        : "string";
 
-        const content = [
-          "// Auto-generado en modo DEV por iconMap.ts",
-          `export type IconName = ${union};`,
-          "",
-        ].join("\n");
+      const content = [
+        "// Auto-generated in DEV mode by iconMap.ts",
+        `export type IconName = ${union};`,
+        "",
+      ].join("\n");
 
-        const current = fs.existsSync(dtsPath) ? fs.readFileSync(dtsPath, "utf-8") : "";
-        if (current !== content) {
-          fs.writeFileSync(dtsPath, content, "utf-8");
-        }
-      } catch {
-        // Ignorar silenciosamente si el entorno no permite escritura
+      const current = fs.existsSync(dtsPath) ? fs.readFileSync(dtsPath, "utf-8") : "";
+      // Only write when changed to avoid triggering a file watcher loop
+      if (current !== content) {
+        fs.writeFileSync(dtsPath, content, "utf-8");
       }
-    }
-  );
+    })
+    .catch(() => {
+      // Silently ignore if the environment does not allow writing
+    });
 }

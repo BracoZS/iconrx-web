@@ -18,3 +18,11 @@ Self-contained Astro `<Icon />` component with zero dependencies.
    ```
 
 > When running `astro dev`, `icons.d.ts` updates automatically to give you TypeScript autocomplete for your `.svg` files.
+
+## Tip: Optimize your SVGs
+
+You can clean up and shrink your downloaded SVGs with SVGO:
+
+```bash
+npx svgo -f src/assets/icons
+```

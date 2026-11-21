@@ -1,3 +1,3 @@
-// Auto-generado en modo DEV por iconMap.ts
-// Cuando corras `astro dev`, este tipo se actualizará con los nombres exactos de tus .svg
+// Auto-generated in DEV mode by iconMap.ts
+// When you run `astro dev`, this type will update with your exact .svg file names
 export type IconName = string;

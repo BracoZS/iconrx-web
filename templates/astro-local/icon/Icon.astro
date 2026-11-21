@@ -11,15 +11,16 @@ interface Props extends Omit<HTMLAttributes<"svg">, "width" | "height"> {
 const { name, size = "1em", title, ...rest } = Astro.props;
 
 const icon = iconMap[name];
-const isFallback = !icon;
 
-if (isFallback && import.meta.env.DEV) {
+if (!icon && import.meta.env.DEV) {
   console.warn(`[Icon] "${name}" not found in /src/assets/icons`);
 }
 
 const { attrs, innerHTML } = icon ?? fallback;
 
-const hasLabel = Boolean(title || rest["aria-label"] || rest["aria-labelledby"]);
+const hasLabel = Boolean(
+  title || rest["aria-label"] || rest["aria-labelledby"],
+);
 const a11yAttrs = hasLabel
   ? { role: "img" as const }
   : { "aria-hidden": "true" as const, focusable: "false" as const };
