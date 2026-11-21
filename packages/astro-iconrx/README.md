@@ -6,7 +6,7 @@ Lightweight SVG icon integration for **Astro**:
 - **Auto-download in `astro dev`**: use `<Icon name="flame" />` without `flame.svg` and it's downloaded from Iconify into your icons folder.
 - **100% static in `astro build`**: no network calls and no `node:fs` in production.
 - **Outline + fill handling**, **automatic a11y**, **`1em` sizing by default** and **TypeScript autocomplete**.
-- Works with the [`iconrx`](../iconrx-cli) CLI (`npx iconrx add menu`).
+- Works with the [`iconrx`](https://www.npmjs.com/package/iconrx) CLI (`npx iconrx add menu`).
 
 ## Install
 
@@ -51,7 +51,7 @@ Priority: `astro.config` options → `package.json` → defaults.
 ### `.astro` files
 ```astro
 ---
-import Icon from "astro-iconrx/icon";
+import { Icon } from "astro-iconrx/components";
 ---
 
 <!-- From your default set ("lucide") -> src/assets/icons/flame.svg -->
@@ -74,14 +74,14 @@ By default icons are `1em`, so they scale with the surrounding text (like an emo
 <Icon name="user" class="size-6" />     <!-- or CSS / Tailwind -->
 ```
 
-### Svelte islands
+### Svelte 5 islands
 ```svelte
 <script lang="ts">
   import Icon from "astro-iconrx/svelte";
-  let open = false;
+  let open = $state(false);
 </script>
 
-<button on:click={() => (open = !open)}>
+<button onclick={() => (open = !open)}>
   <Icon name={open ? "x" : "burger"} size={24} />
 </button>
 ```

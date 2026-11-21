@@ -17,7 +17,7 @@ npx iconrx add menu user simple-icons:astro
 
 ```astro
 ---
-import Icon from "astro-iconrx/icon";
+import { Icon } from "astro-iconrx/components";
 ---
 
 <Icon name="menu" size={24} />

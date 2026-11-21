@@ -1,10 +1,10 @@
 ---
 import type { HTMLAttributes } from "astro/types";
-import type { IconName } from "./types.generated";
+import type { IconName } from "./index.js";
 // @ts-ignore - resolved by the astro-iconrx Vite plugin
 import { getIcon, fallback, iconrxConfig } from "virtual:iconrx";
 
-interface Props extends Omit<HTMLAttributes<"svg">, "width" | "height"> {
+export interface Props extends Omit<HTMLAttributes<"svg">, "width" | "height"> {
   name: IconName;
   /** Any CSS size ("1.5rem", "24px") or a number (px). Defaults to "1em" (matches the text size). */
   size?: string | number;

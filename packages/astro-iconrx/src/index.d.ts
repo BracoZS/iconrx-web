@@ -1,5 +1,12 @@
 import type { AstroIntegration } from "astro";
-export type { IconName } from "./Icon";
+
+/**
+ * Augmented automatically by `astro-iconrx` (in `.astro/integrations/astro-iconrx/icons.d.ts`)
+ * with the names of your local `.svg` files.
+ */
+export interface IconRegistry {}
+
+export type IconName = keyof IconRegistry extends never ? string : keyof IconRegistry;
 
 /**
  * All options are optional. Missing ones are read from the "iconrx" field in your

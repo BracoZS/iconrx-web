@@ -8,11 +8,15 @@
       "types": "./src/index.d.ts",
       "default": "./src/index.js"
     },
-    "./icon": {
-      "types": "./src/Icon.d.ts",
-      "default": "./src/Icon.astro"
+    "./components": {
+      "types": "./src/components.d.ts",
+      "default": "./src/components.js"
     },
-    "./svelte": "./src/Icon.svelte",
+    "./svelte": {
+      "types": "./src/Icon.svelte.d.ts",
+      "svelte": "./src/Icon.svelte",
+      "default": "./src/Icon.svelte"
+    },
     "./core": "./src/core.js"
   },
   "files": [
@@ -30,17 +34,27 @@
     "svg",
     "iconify"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/BracoZS/iconrx-web.git",
+    "directory": "packages/astro-iconrx"
+  },
+  "homepage": "https://github.com/BracoZS/iconrx-web/tree/main/packages/astro-iconrx#readme",
+  "bugs": {
+    "url": "https://github.com/BracoZS/iconrx-web/issues"
+  },
+  "author": "BracoZS",
+  "license": "MIT",
   "dependencies": {
     "iconrx": "workspace:^"
   },
   "peerDependencies": {
     "astro": ">=4.0.0",
-    "svelte": ">=4.0.0"
+    "svelte": ">=5.0.0"
   },
   "peerDependenciesMeta": {
     "svelte": {
       "optional": true
     }
-  },
-  "license": "MIT"
+  }
 }
