@@ -64,15 +64,19 @@ import { Icon } from "astro-iconrx/components";
 <Icon name="alert-triangle" title="Warning" />
 ```
 
-### Sizing
+### Sizing & styling
 
-By default icons are `1em`, so they scale with the surrounding text (like an emoji). Override it when needed:
+Icons default to `1em` and inherit `currentColor` — style them with `size`, `class`, or `style`:
 
 ```astro
-<Icon name="user" size={24} />          <!-- number = px -->
-<Icon name="user" size="1.5rem" />      <!-- any CSS value -->
-<Icon name="user" class="size-6" />     <!-- or CSS / Tailwind -->
+<Icon name="user" size={24} />                      <!-- number = px -->
+<Icon name="user" size="1.5rem" />                  <!-- any CSS value -->
+<Icon name="user" class="size-6 text-amber-400" />  <!-- CSS / Tailwind -->
 ```
+
+> **Tip:** Use `text-*` to color the icon.
+>
+> For separate `stroke-*` and `fill-*`, target `<svg>` children with `*:` (e.g. `*:stroke-amber-400 *:fill-red-500`).
 
 ### Svelte 5 islands
 ```svelte
